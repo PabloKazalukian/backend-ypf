@@ -2,9 +2,14 @@
   "name": "backend-ypf",
   "version": "1.0.0",
   "private": true,
-  "description": "Servidor Node.js simple",
-  "main": "server.js",
+  "description": "API de gestión de producción petrolera",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/server.js",
+    "seed": "node src/seeds/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongodb": "^6.8.0"
   }
 }
