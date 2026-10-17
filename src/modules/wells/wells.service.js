@@ -17,7 +17,7 @@ function buildFilter(query) {
   if (query.region) filter['region.code'] = query.region;
   if (query.field) filter['field.code'] = query.field;
   if (query.platform) filter['platform.code'] = query.platform;
-  if (query.status) filter.status = query.status;
+  if (query.status) filter['status'] = query.status;
 
   return filter;
 }
@@ -39,4 +39,47 @@ async function getWellById(id) {
   return well;
 }
 
-module.exports = { listWells, getWellById, isValidObjectId, httpError };
+// --- NUEVO: CREATE ---
+async function createWell(wellData) {
+  // Aquí se podrían agregar validaciones de negocio antes de guardar
+  return await repository.createWell(wellData);
+}
+
+// --- NUEVO: UPDATE ---
+async function updateWell(id, updateData) {
+  if (!isValidObjectId(id)) {
+    throw httpError(400, 'Invalid well id');
+  }
+
+  const updatedWell = await repository.updateWell(new ObjectId(id), updateData);
+  if (!updatedWell) {
+    throw httpError(404, 'Well not found for update');
+  }
+
+  return updatedWell;
+}
+
+// --- NUEVO: DELETE ---
+async function deleteWell(id) {
+  if (!isValidObjectId(id)) {
+    throw httpError(400, 'Invalid well id');
+  }
+
+  const deleted = await repository.deleteWell(new ObjectId(id));
+  if (!deleted) {
+    throw httpError(404, 'Well not found for deletion');
+  }
+
+  return true;
+}
+
+module.exports = { 
+  listWells, 
+  getWellById, 
+  createWell,
+  updateWell,
+  deleteWell,
+  isValidObjectId, 
+  httpError 
+};
+

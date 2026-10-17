@@ -1,0 +1,101 @@
+[
+  {
+    "_id": "652222222222222222222201",
+    "wellCode": "NEU-P01-W01",
+    "year": 2026,
+    "month": 1,
+    "oilVolumeM3": 1250.5,
+    "gasVolumeM3": 5800,
+    "waterVolumeM3": 320,
+    "operatingDays": 31,
+    "notes": "Producción estable enero"
+  },
+  {
+    "_id": "652222222222222222222202",
+    "wellCode": "NEU-P01-W01",
+    "year": 2026,
+    "month": 2,
+    "oilVolumeM3": 1180.75,
+    "gasVolumeM3": 5520,
+    "waterVolumeM3": 295,
+    "operatingDays": 28,
+    "notes": "Producción estable febrero"
+  },
+  {
+    "_id": "652222222222222222222203",
+    "wellCode": "NEU-P01-W01",
+    "year": 2026,
+    "month": 3,
+    "oilVolumeM3": 1320.4,
+    "gasVolumeM3": 6100,
+    "waterVolumeM3": 345,
+    "operatingDays": 31,
+    "notes": "Producción estable marzo"
+  },
+  {
+    "_id": "652222222222222222222204",
+    "wellCode": "NEU-P01-W02",
+    "year": 2026,
+    "month": 1,
+    "oilVolumeM3": 450.2,
+    "gasVolumeM3": 12400,
+    "waterVolumeM3": 150,
+    "operatingDays": 31,
+    "notes": "Mayor producción de gas"
+  },
+  {
+    "_id": "652222222222222222222205",
+    "wellCode": "NEU-P01-W02",
+    "year": 2026,
+    "month": 2,
+    "oilVolumeM3": 425.6,
+    "gasVolumeM3": 11850,
+    "waterVolumeM3": 140,
+    "operatingDays": 28,
+    "notes": "Evolución normal"
+  },
+  {
+    "_id": "652222222222222222222206",
+    "wellCode": "NEU-P01-W02",
+    "year": 2026,
+    "month": 3,
+    "oilVolumeM3": 465.8,
+    "gasVolumeM3": 12900,
+    "waterVolumeM3": 155,
+    "operatingDays": 31,
+    "notes": "Incremento de gas"
+  },
+  {
+    "_id": "652222222222222222222207",
+    "wellCode": "SJG-P02-W01",
+    "year": 2026,
+    "month": 1,
+    "oilVolumeM3": 2850.25,
+    "gasVolumeM3": 3850,
+    "waterVolumeM3": 620,
+    "operatingDays": 31,
+    "notes": "Producción mixta estable"
+  },
+  {
+    "_id": "652222222222222222222208",
+    "wellCode": "SJG-P02-W01",
+    "year": 2026,
+    "month": 2,
+    "oilVolumeM3": 2720.5,
+    "gasVolumeM3": 3680,
+    "waterVolumeM3": 590,
+    "operatingDays": 28,
+    "notes": "Producción normal"
+  },
+  {
+    "_id": "652222222222222222222209",
+    "wellCode": "SJG-P02-W01",
+    "year": 2026,
+    "month": 3,
+    "oilVolumeM3": 2940.75,
+    "gasVolumeM3": 3950,
+    "waterVolumeM3": 645,
+    "operatingDays": 31,
+    "notes": "Buen desempeño"
+  }
+]

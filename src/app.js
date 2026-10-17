@@ -11,8 +11,8 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.use('/api/v1/wells', wellsRoutes);
-app.use('/api/v1/productions', productionsRoutes);
+app.use('/api/wells', wellsRoutes);
+app.use('/api/productions', productionsRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

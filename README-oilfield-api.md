@@ -1,8 +1,6 @@
 # Oilfield Production Management API
 
-API REST académica para consultar pozos petroleros y registrar su
-producción mensual. El proyecto utiliza Node.js, Express y el driver
-oficial de MongoDB.
+API REST académica para consultar pozos petroleros y registrar su producción mensual. El proyecto utiliza Node.js, Express y el driver oficial de MongoDB.
 
 ## 1. Datos generales
 
@@ -13,8 +11,7 @@ oficial de MongoDB.
 
 ## 2. Esquemas de documentos
 
-En MongoDB, `_id` y la referencia `wellId` son valores BSON `ObjectId`.
-Los ejemplos muestran los tipos de dato de cada propiedad.
+En MongoDB, `_id` y la referencia `wellId` son valores BSON `ObjectId`.Los ejemplos muestran los tipos de dato de cada propiedad.
 
 ### 2.1. `wells`
 
@@ -103,33 +100,176 @@ Ejemplo:
 ## 3. Arquitectura de carpetas
 
 ```text
-src/
-  config/
-    database.js
-  modules/
-    wells/
-      wells.routes.js
-      wells.controller.js
-      wells.service.js
-      wells.repository.js
-    productions/
-      productions.routes.js
-      productions.controller.js
-      productions.service.js
-      productions.repository.js
-  middlewares/
-    error-handler.js
-    validate-request.js
-  seeds/
-    seed.js
-  app.js
-  server.js
+backend-ypf/
+  data/
+    productions.json
+  src/
+    config/
+      database.js
+    modules/
+      wells/
+        wells.routes.js
+        wells.controller.js
+        wells.service.js
+        wells.repository.js
+      productions/
+        productions.routes.js
+        productions.controller.js
+        productions.service.js
+        productions.repository.js
+    middlewares/
+      error-handler.js
+      validate-request.js
+    seeds/
+      seed.js
+    app.js
+    server.js
 ```
 
 - **Route:** declara endpoints y middlewares.
-- **Controller:** recibe la solicitud HTTP, llama al service y
-  construye la respuesta.
+- **Controller:** recibe la solicitud HTTP, llama al service y construye la respuesta.
 - **Service:** aplica las reglas de negocio.
 - **Repository:** ejecuta consultas mediante el driver de MongoDB.
 - **Config:** configura y mantiene la conexión.
-- **Seed:** carga los pozos de referencia iniciales.
+- **Seed:** carga los pozos de referencia iniciales y las producciones de ejemplo desde `data/productions.json`.
+
+## 4. Endpoints
+
+Todas las rutas cuelgan de `/api`.
+
+### 4.1. `wells` — CRUD completo
+
+| Método | Ruta                         | Descripción                         |
+| ------ | ---------------------------- | ----------------------------------- |
+| GET    | `/api/wells`                 | Lista pozos (filtros por query).    |
+| GET    | `/api/wells/:id`             | Obtiene un pozo por `_id`.          |
+| GET    | `/api/wells/:id/productions` | Producciones de un pozo (`?year=`). |
+| POST   | `/api/wells`                 | Crea un pozo.                       |
+| PUT    | `/api/wells/:id`             | Actualiza un pozo.                  |
+| DELETE | `/api/wells/:id`             | Elimina un pozo.                    |
+
+### 4.2. `monthly_productions` — CRUD completo
+
+| Método | Ruta                   | Descripción                                   |
+| ------ | ---------------------- | --------------------------------------------- |
+| GET    | `/api/productions`     | Lista producciones (`?wellId=&year=&month=`). |
+| GET    | `/api/productions/:id` | Obtiene un registro por `_id`.                |
+| POST   | `/api/productions`     | Crea un registro de producción.               |
+| PATCH  | `/api/productions/:id` | Actualiza parcialmente un registro.           |
+| DELETE | `/api/productions/:id` | Elimina un registro.                          |
+
+#### Consulta por fecha
+
+Para pedir **todas** las producciones, se llama a `GET /api/productions`
+sin parámetros. Para pedir las de una **fecha específica**, se agrega el
+mes y el año como query string:
+
+```text
+GET /api/productions?year=2026&month=1
+```
+
+- `year` y `month` buscan por el mes y año solicitados (se pueden combinar con `wellId`).
+- Si la consulta no devuelve resultados, la API responde **404** con el mensaje `No se encontró producción para el mes <mes> del año <año>` en lugar de un arreglo vacío. El mismo criterio aplica a cualquier consulta (`GET /api/productions`, `GET /api/wells/:id/productions`) sin resultados.
+
+## 5. Datos de ejemplo (seed)
+
+Las producciones iniciales se cargan desde `data/productions.json`.
+Cada entrada referencia el pozo mediante `wellCode`, que el seed resuelve a su `_id` antes de insertar. Ejemplo de una entrada:
+
+```json
+{
+  "wellCode": "NEU-P01-W01",
+  "year": 2026,
+  "month": 1,
+  "oilVolumeM3": 1250.5,
+  "gasVolumeM3": 5800,
+  "waterVolumeM3": 320,
+  "operatingDays": 31,
+  "notes": "Producción estable enero"
+}
+```
+
+## 6. Ejemplos de uso
+
+Todas las rutas cuelgan de `http://localhost:3008`.
+
+Para los requests por id (`GET`/`PUT`/`PATCH`/`DELETE`) se pueden usar los `_id` fijos que existen después de ejecutar `npm run seed`:
+
+- `wellId`: `651111111111111111111101`
+- `productionId`: `652222222222222222222201`
+
+### 6.1. Wells
+
+| Request               | Método   | URL                                                                    |
+| --------------------- | -------- | ---------------------------------------------------------------------- |
+| Listar pozos          | `GET`    | `http://localhost:3008/api/wells`                                      |
+| Obtener pozo por id   | `GET`    | `http://localhost:3008/api/wells/651111111111111111111101`             |
+| Producciones del pozo | `GET`    | `http://localhost:3008/api/wells/651111111111111111111101/productions` |
+| Crear pozo            | `POST`   | `http://localhost:3008/api/wells`                                      |
+| Actualizar pozo       | `PUT`    | `http://localhost:3008/api/wells/651111111111111111111101`             |
+| Eliminar pozo         | `DELETE` | `http://localhost:3008/api/wells/651111111111111111111101`             |
+
+- **Listar pozos**: query opcional `region` y `status`.
+- **Producciones del pozo**: query opcional `year`.
+- **Crear pozo** y **Actualizar pozo**: header `Content-Type: application/json` y body JSON:
+
+```json
+{
+  "code": "NEU-P01-W03",
+  "name": "Pozo Norte 03",
+  "region": { "code": "NEU", "name": "Cuenca Neuquina" },
+  "field": { "code": "AREA-NORTE", "name": "Área Norte" },
+  "platform": { "code": "PLAT-01", "name": "Plataforma Norte 01" },
+  "wellType": "oil",
+  "exploitationType": "unconventional",
+  "extractionMethod": "horizontal",
+  "status": "producing",
+  "startDate": "2025-06-01T00:00:00.000Z",
+  "productionStartDate": "2025-09-01T00:00:00.000Z",
+  "coordinates": { "latitude": -38.53, "longitude": -69.52 }
+}
+```
+
+### 6.2. Productions
+
+| Request               | Método   | URL                                                              |
+| --------------------- | -------- | ---------------------------------------------------------------- |
+| Listar todas          | `GET`    | `http://localhost:3008/api/productions`                          |
+| Buscar por fecha      | `GET`    | `http://localhost:3008/api/productions?year=2026&month=1`        |
+| Obtener por id        | `GET`    | `http://localhost:3008/api/productions/652222222222222222222201` |
+| Crear producción      | `POST`   | `http://localhost:3008/api/productions`                          |
+| Actualizar producción | `PATCH`  | `http://localhost:3008/api/productions/652222222222222222222201` |
+| Eliminar producción   | `DELETE` | `http://localhost:3008/api/productions/652222222222222222222201` |
+
+- **Buscar por fecha**: enviar `year` y `month` como query string
+  (opcional `wellId`).
+- **Crear producción**: header `Content-Type: application/json` y body
+  JSON:
+
+```json
+{
+  "wellId": "651111111111111111111101",
+  "year": 2026,
+  "month": 4,
+  "oilVolumeM3": 1300.5,
+  "gasVolumeM3": 6000,
+  "waterVolumeM3": 340,
+  "operatingDays": 30,
+  "notes": "Registro de ejemplo"
+}
+```
+
+- **Actualizar producción**: body JSON con los campos a cambiar:
+
+```json
+{ "oilVolumeM3": 1350.25 }
+```
+
+### 6.3. Respuesta "no encontrado"
+
+Cuando una consulta de producciones no devuelve resultados, la API
+responde **404** con este body (ejemplo: `?year=2026&month=6`):
+
+```json
+{ "error": "No se encontró producción para el mes 6 del año 2026" }
+```

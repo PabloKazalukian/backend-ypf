@@ -1,6 +1,7 @@
 const service = require('./wells.service');
 const productionsService = require('../productions/productions.service');
 
+// --- READ (YA EXISTENTES) ---
 async function list(req, res, next) {
   try {
     const wells = await service.listWells(req.query);
@@ -28,4 +29,44 @@ async function getProductions(req, res, next) {
   }
 }
 
-module.exports = { list, getById, getProductions };
+// --- CREATE (POST) ---
+async function create(req, res, next) {
+  try {
+    const newWell = await service.createWell(req.body);
+    res.status(201).json(newWell);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// --- UPDATE (PUT) ---
+async function update(req, res, next) {
+  try {
+    const { id } = req.params;
+    const updatedWell = await service.updateWell(id, req.body);
+    res.json(updatedWell);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// --- DELETE (DELETE) ---
+async function deleteWell(req, res, next) {
+  try {
+    const { id } = req.params;
+    await service.deleteWell(id);
+    res.json({ message: 'Pozo eliminado con éxito 🛢️' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// Exportamos el CRUD completo de forma limpia
+module.exports = { 
+  list, 
+  getById, 
+  getProductions,
+  create,
+  update,
+  deleteWell
+};

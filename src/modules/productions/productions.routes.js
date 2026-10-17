@@ -14,13 +14,14 @@ const requiredOnCreate = [
   'operatingDays',
 ];
 
-// GET /api/v1/productions?wellId=...&year=2026&month=9
 router.get('/', controller.list);
 
-// POST /api/v1/productions
 router.post('/', requireBodyFields(requiredOnCreate), controller.create);
 
-// PATCH /api/v1/productions/:id
+router.get('/:id', controller.getById);
+
 router.patch('/:id', controller.update);
+
+router.delete('/:id', controller.deleteProduction);
 
 module.exports = router;

@@ -18,6 +18,15 @@ async function create(req, res, next) {
   }
 }
 
+async function getById(req, res, next) {
+  try {
+    const production = await service.getProductionById(req.params.id);
+    res.json(production);
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function update(req, res, next) {
   try {
     const production = await service.updateProduction(req.params.id, req.body || {});
@@ -27,4 +36,14 @@ async function update(req, res, next) {
   }
 }
 
-module.exports = { list, create, update };
+async function deleteProduction(req, res, next) {
+  try {
+    const { id } = req.params;
+    await service.deleteProduction(id);
+    res.json({ message: 'Registro de producción eliminado con éxito' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { list, getById, create, update, deleteProduction };

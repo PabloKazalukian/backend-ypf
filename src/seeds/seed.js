@@ -1,9 +1,16 @@
+require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
+const { ObjectId } = require('mongodb');
 const { connectDatabase, getDb, closeDatabase } = require('../config/database');
 const { ensureIndexes: ensureWellIndexes } = require('../modules/wells/wells.repository');
 const { ensureIndexes: ensureProductionIndexes } = require('../modules/productions/productions.repository');
 
+// _id fijos para que los datos sean estables entre corridas del seed y
+// puedan referenciarse de forma directa en pruebas y ejemplos.
 const WELLS = [
   {
+    _id: new ObjectId('651111111111111111111101'),
     code: 'NEU-P01-W01',
     name: 'Pozo Norte 01',
     region: { code: 'NEU', name: 'Cuenca Neuquina' },
@@ -18,6 +25,7 @@ const WELLS = [
     coordinates: { latitude: -38.5, longitude: -69.5 },
   },
   {
+    _id: new ObjectId('651111111111111111111102'),
     code: 'NEU-P01-W02',
     name: 'Pozo Norte 02',
     region: { code: 'NEU', name: 'Cuenca Neuquina' },
@@ -32,6 +40,7 @@ const WELLS = [
     coordinates: { latitude: -38.52, longitude: -69.51 },
   },
   {
+    _id: new ObjectId('651111111111111111111103'),
     code: 'SJG-P02-W01',
     name: 'Pozo San Jorge 01',
     region: { code: 'SJG', name: 'Golfo San Jorge' },
@@ -59,7 +68,40 @@ async function run() {
   const docs = WELLS.map((well) => ({ ...well, createdAt: now, updatedAt: now }));
   const result = await db.collection('wells').insertMany(docs);
 
-  console.log(`Seeded ${result.insertedCount} wells.`);
+
+  // Cargar producciones desde data/productions.json
+  const productionsData = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '../../data/productions.json'), 'utf8')
+  );
+
+  const insertedWells = await db.collection('wells').find({}).toArray();
+  const wellMap = new Map(insertedWells.map((well) => [well.code, well._id]));
+
+  await db.collection('monthly_productions').deleteMany({});
+
+  const prodDocs = productionsData.map((prod) => {
+    const wellId = wellMap.get(prod.wellCode);
+    if (!wellId) {
+      throw new Error(`Well code not found: ${prod.wellCode}`);
+    }
+    return {
+      _id: new ObjectId(prod._id),
+      wellId,
+      year: prod.year,
+      month: prod.month,
+      oilVolumeM3: prod.oilVolumeM3,
+      gasVolumeM3: prod.gasVolumeM3,
+      waterVolumeM3: prod.waterVolumeM3,
+      operatingDays: prod.operatingDays,
+      notes: prod.notes || null,
+      createdAt: now,
+      updatedAt: now,
+    };
+  });
+
+  const prodResult = await db.collection('monthly_productions').insertMany(prodDocs);
+  console.log(`Seeded ${prodResult.insertedCount} production records.`);
+
   await closeDatabase();
 }
 

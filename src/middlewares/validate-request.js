@@ -1,4 +1,3 @@
-// Ensures the request body contains the given fields before reaching the controller.
 function requireBodyFields(fields) {
   return (req, res, next) => {
     const body = req.body || {};

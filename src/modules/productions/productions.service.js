@@ -43,8 +43,25 @@ function buildFilter(query) {
   return filter;
 }
 
+function emptyResultError(query = {}) {
+  if (query.year && query.month) {
+    return httpError(
+      404,
+      `No se encontró producción para el mes ${query.month} del año ${query.year}`
+    );
+  }
+  if (query.year) {
+    return httpError(404, `No se encontró producción para el año ${query.year}`);
+  }
+  return httpError(404, 'No se encontraron registros de producción');
+}
+
 async function listProductions(query = {}) {
-  return repository.findAll(buildFilter(query));
+  const productions = await repository.findAll(buildFilter(query));
+  if (productions.length === 0) {
+    throw emptyResultError(query);
+  }
+  return productions;
 }
 
 async function listByWell(wellId, query = {}) {
@@ -53,7 +70,11 @@ async function listByWell(wellId, query = {}) {
   const filter = { wellId: new ObjectId(wellId) };
   if (query.year) filter.year = Number(query.year);
 
-  return repository.findAll(filter);
+  const productions = await repository.findAll(filter);
+  if (productions.length === 0) {
+    throw emptyResultError(query);
+  }
+  return productions;
 }
 
 async function createProduction(payload) {
@@ -101,6 +122,32 @@ async function createProduction(payload) {
     }
     throw err;
   }
+}
+
+async function getProductionById(id) {
+  if (!wellService.isValidObjectId(id)) {
+    throw httpError(400, 'Invalid id');
+  }
+
+  const production = await repository.findById(new ObjectId(id));
+  if (!production) {
+    throw httpError(404, 'Production record not found');
+  }
+
+  return production;
+}
+
+async function deleteProduction(id) {
+  if (!wellService.isValidObjectId(id)) {
+    throw httpError(400, 'Invalid id');
+  }
+
+  const deleted = await repository.deleteById(new ObjectId(id));
+  if (!deleted) {
+    throw httpError(404, 'Production record not found');
+  }
+
+  return true;
 }
 
 async function updateProduction(id, payload) {
@@ -162,6 +209,8 @@ async function updateProduction(id, payload) {
 module.exports = {
   listProductions,
   listByWell,
+  getProductionById,
   createProduction,
   updateProduction,
+  deleteProduction,
 };

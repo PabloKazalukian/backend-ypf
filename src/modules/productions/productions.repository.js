@@ -29,6 +29,11 @@ async function updateById(objectId, fields) {
   return result.matchedCount > 0;
 }
 
+async function deleteById(objectId) {
+  const result = await collection().deleteOne({ _id: objectId });
+  return result.deletedCount > 0;
+}
+
 async function ensureIndexes() {
   await collection().createIndex({ wellId: 1, year: 1, month: 1 }, { unique: true });
 }
@@ -39,5 +44,6 @@ module.exports = {
   findByWellPeriod,
   insertOne,
   updateById,
+  deleteById,
   ensureIndexes,
 };
