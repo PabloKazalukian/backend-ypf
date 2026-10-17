@@ -97,5 +97,137 @@
     "waterVolumeM3": 645,
     "operatingDays": 31,
     "notes": "Buen desempeño"
+  },
+  {
+    "_id": "652222222222222222222210",
+    "wellCode": "NEU-P01-W03",
+    "year": 2026,
+    "month": 1,
+    "oilVolumeM3": 980.2,
+    "gasVolumeM3": 4100,
+    "waterVolumeM3": 275,
+    "operatingDays": 20,
+    "notes": "Pozo en mantenimiento"
+  },
+  {
+    "_id": "652222222222222222222211",
+    "wellCode": "NEU-P01-W03",
+    "year": 2026,
+    "month": 2,
+    "oilVolumeM3": 640.5,
+    "gasVolumeM3": 2600,
+    "waterVolumeM3": 210,
+    "operatingDays": 12,
+    "notes": "Mantenimiento programado"
+  },
+  {
+    "_id": "652222222222222222222212",
+    "wellCode": "NEU-P02-W01",
+    "year": 2026,
+    "month": 1,
+    "oilVolumeM3": 380.4,
+    "gasVolumeM3": 15800,
+    "waterVolumeM3": 120,
+    "operatingDays": 31,
+    "notes": "Alta producción de gas"
+  },
+  {
+    "_id": "652222222222222222222213",
+    "wellCode": "NEU-P02-W01",
+    "year": 2026,
+    "month": 2,
+    "oilVolumeM3": 365.9,
+    "gasVolumeM3": 15100,
+    "waterVolumeM3": 118,
+    "operatingDays": 28,
+    "notes": "Producción estable"
+  },
+  {
+    "_id": "652222222222222222222214",
+    "wellCode": "NEU-P02-W01",
+    "year": 2026,
+    "month": 3,
+    "oilVolumeM3": 402.1,
+    "gasVolumeM3": 16250,
+    "waterVolumeM3": 130,
+    "operatingDays": 31,
+    "notes": "Leve incremento"
+  },
+  {
+    "_id": "652222222222222222222215",
+    "wellCode": "NEU-P02-W02",
+    "year": 2026,
+    "month": 1,
+    "oilVolumeM3": 1720.0,
+    "gasVolumeM3": 4300,
+    "waterVolumeM3": 410,
+    "operatingDays": 31,
+    "notes": "Producción mixta"
+  },
+  {
+    "_id": "652222222222222222222216",
+    "wellCode": "NEU-P02-W02",
+    "year": 2026,
+    "month": 2,
+    "oilVolumeM3": 1685.5,
+    "gasVolumeM3": 4180,
+    "waterVolumeM3": 395,
+    "operatingDays": 28,
+    "notes": "Producción mixta"
+  },
+  {
+    "_id": "652222222222222222222217",
+    "wellCode": "SJG-P01-W01",
+    "year": 2026,
+    "month": 1,
+    "oilVolumeM3": 3120.8,
+    "gasVolumeM3": 2050,
+    "waterVolumeM3": 720,
+    "operatingDays": 31,
+    "notes": "Buen caudal de petróleo"
+  },
+  {
+    "_id": "652222222222222222222218",
+    "wellCode": "SJG-P01-W01",
+    "year": 2026,
+    "month": 2,
+    "oilVolumeM3": 3050.25,
+    "gasVolumeM3": 1980,
+    "waterVolumeM3": 700,
+    "operatingDays": 28,
+    "notes": "Producción estable"
+  },
+  {
+    "_id": "652222222222222222222219",
+    "wellCode": "SJG-P01-W01",
+    "year": 2026,
+    "month": 3,
+    "oilVolumeM3": 3180.9,
+    "gasVolumeM3": 2120,
+    "waterVolumeM3": 735,
+    "operatingDays": 31,
+    "notes": "Producción estable"
+  },
+  {
+    "_id": "652222222222222222222220",
+    "wellCode": "SJG-P01-W02",
+    "year": 2025,
+    "month": 11,
+    "oilVolumeM3": 210.0,
+    "gasVolumeM3": 5400,
+    "waterVolumeM3": 90,
+    "operatingDays": 15,
+    "notes": "Pozo detenido parte del mes"
+  },
+  {
+    "_id": "652222222222222222222221",
+    "wellCode": "SJG-P01-W02",
+    "year": 2025,
+    "month": 12,
+    "oilVolumeM3": 0,
+    "gasVolumeM3": 0,
+    "waterVolumeM3": 0,
+    "operatingDays": 0,
+    "notes": "Pozo fuera de servicio (shut_in)"
   }
 ]

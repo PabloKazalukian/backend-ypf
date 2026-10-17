@@ -39,13 +39,10 @@ async function getWellById(id) {
   return well;
 }
 
-// --- NUEVO: CREATE ---
 async function createWell(wellData) {
-  // Aquí se podrían agregar validaciones de negocio antes de guardar
   return await repository.createWell(wellData);
 }
 
-// --- NUEVO: UPDATE ---
 async function updateWell(id, updateData) {
   if (!isValidObjectId(id)) {
     throw httpError(400, 'Invalid well id');
@@ -59,7 +56,6 @@ async function updateWell(id, updateData) {
   return updatedWell;
 }
 
-// --- NUEVO: DELETE ---
 async function deleteWell(id) {
   if (!isValidObjectId(id)) {
     throw httpError(400, 'Invalid well id');

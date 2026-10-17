@@ -155,6 +155,7 @@ async function updateProduction(id, payload) {
     throw httpError(400, 'Invalid id');
   }
 
+  //Confirmar que el registro existe antes de intentar actualizarlo
   const objectId = new ObjectId(id);
   const existing = await repository.findById(objectId);
   if (!existing) {
@@ -167,12 +168,14 @@ async function updateProduction(id, payload) {
   const targetYear = year ?? existing.year;
   const targetMonth = month ?? existing.month;
 
+  //Validacion de año y mes
   if (year !== undefined || month !== undefined) {
     validatePeriod(targetYear, targetMonth);
     fields.year = targetYear;
     fields.month = targetMonth;
   }
 
+  //Validacion de volumenes
   const volumes = { oilVolumeM3, gasVolumeM3, waterVolumeM3 };
   for (const [field, value] of Object.entries(volumes)) {
     if (value !== undefined) {
@@ -183,6 +186,7 @@ async function updateProduction(id, payload) {
     }
   }
 
+  //Validacion de operatingDays
   const maxDays = daysInMonth(targetYear, targetMonth);
   if (operatingDays !== undefined) {
     if (!Number.isInteger(operatingDays) || operatingDays < 0 || operatingDays > maxDays) {
@@ -193,7 +197,7 @@ async function updateProduction(id, payload) {
 
   if (notes !== undefined) fields.notes = notes;
 
-  // If the period changes, ensure the new period is still unique for this well.
+  //Validacion de period
   const periodChanged = targetYear !== existing.year || targetMonth !== existing.month;
   if (periodChanged) {
     const clash = await repository.findByWellPeriod(existing.wellId, targetYear, targetMonth);
