@@ -305,3 +305,10 @@ Cuando una consulta de producciones no devuelve resultados, la API responde **40
 ```json
 { "error": "No se encontró producción para el mes 6 del año 2026" }
 ```
+
+## 8. Colaboradores
+
+Proyecto desarrollado conjuntamente por:
+
+- **Ezequiel Federico Cabrera**
+- **Pablo Alejandro Kazalukian**
